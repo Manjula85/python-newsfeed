@@ -9,7 +9,7 @@ def create_app(test_config=None):
     SECRET_KEY='super_secret_key'
   )
 
-  # A page
+  # Example page
   @app.route('/hello')
   def hello():
     return 'hello world'
