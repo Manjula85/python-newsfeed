@@ -1,4 +1,4 @@
-from flask import Blueprint, json, request, jsonify, session
+from flask import Blueprint, request, jsonify, session
 from app.models import User
 from app.db import get_db
 import sys
@@ -41,19 +41,21 @@ def logout():
 
 @bp.route('/users/login', methods=['POST'])
 def login():
+    print('am I here now?')
     data = request.get_json()
     db = get_db()
     try:
         user = db.query(User).filter(User.email == data['email']).one()
     except:
         print(sys.exc_info()[0])
+
         return jsonify(message = 'Incorrect credentials'), 400
 
     if user.verify_password(data['password']) == False:
         return jsonify(message = 'Incorrect credentials'), 400
 
     session.clear()
-    session['user_id'] = user_id
+    session['user_id'] = user.id
     session['loggedIn'] = True
 
-    return jsonify(id = user_id)
+    return jsonify(id = user.id)
